@@ -44,7 +44,7 @@ map <F5> : ! lldb %< <CR>
 map <C-CR> : NvimTreeToggle <CR>
 
 
-call plug#begin()
+call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'preservim/nerdtree'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'vim-airline/vim-airline'
@@ -62,15 +62,24 @@ call plug#begin()
   Plug 'HiPhish/rainbow-delimiters.nvim'
 call plug#end()
 
-:augroup cprograms
-:   autocmd VimEnter * if !argc() | NvimTreeOpen | endif
-":   autocmd VimEnter * TSEnable highlight
-":   autocmd VimEnter * NvimTreeOpen | wincmd p
-":   autocmd VimEnter * NvimTreeOpen
-":   autocmd VimEnter * wincmd p
-":   autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-":   autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-":   autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif
+
+:augroup NVT
+  autocmd VimEnter * NvimTreeToggle
+  autocmd VimEnter ?* NvimTreeToggle
+" 非常神奇 其他的方法都行不通
+"  autocmd StdinReadPre * let s:std_in=1
+"  autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NvimTreeOpen | endif
+"  autocmd VimEnter * if !bufexists(0) | NvimTreeOpen | endif
+"  autocmd VimEnter * if argc() != 0 | NvimTreeToggle | endif
+"  autocmd VimEnter * if argc() == 0 | echo "gg" | endif
+"  autocmd VimEnter * if argc() == 0 | NvimTreeOpen | endif
+"  autocmd VimEnter * TSEnable highlight
+"  autocmd VimEnter * NvimTreeOpen | wincmd p
+"  autocmd VimEnter * NvimTreeOpen
+"  autocmd VimEnter * wincmd p
+"  autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+"  autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+"  autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif
 :augroup END
 
 source ~/.config/nvim/vim/cocConfig.vim
@@ -78,4 +87,4 @@ source ~/.config/nvim/vim/cocConfig.vim
 lua require("treesitterConfig")
 lua require("NvimTreeConfig")
 
-lua print("Done")
+"lua print("Done")
