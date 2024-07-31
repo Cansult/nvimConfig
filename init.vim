@@ -30,6 +30,10 @@ set backspace=indent,eol,start
 "set guioptions-=T
 set termguicolors
 
+"let g:minimap_width = 25
+"let g:minimap_auto_start = 1
+"let g:minimap_auto_start_win_enter = 1
+
 " set fillchars+=vert:\ 
 hi vertsplit guifg=fg guibg=bg
 hi NvimTreeNormal guibg=bg
@@ -43,6 +47,13 @@ map <F8> : ! ./%< <CR>
 map <F5> : ! lldb %< <CR>
 map <C-CR> : NvimTreeToggle <CR>
 
+"我怀疑有个插件有bug，在没有右括号的时候回车不会缩进，还是加上括号补全吧
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+"inoremap { {<CR>}<ESC>kA
+"inoremap ' ''<ESC>i
+"inoremap " ""<ESC>i
 
 call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'preservim/nerdtree'
@@ -61,7 +72,6 @@ call plug#begin('~/.config/nvim/plugDownloads')
   Plug 'nvim-tree/nvim-tree.lua'
   Plug 'HiPhish/rainbow-delimiters.nvim'
 call plug#end()
-
 
 :augroup NVT
   autocmd VimEnter * NvimTreeToggle
@@ -87,4 +97,4 @@ source ~/.config/nvim/vim/cocConfig.vim
 lua require("treesitterConfig")
 lua require("NvimTreeConfig")
 
-"lua print("Done")
+lua print("Done")

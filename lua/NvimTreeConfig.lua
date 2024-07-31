@@ -1,7 +1,7 @@
 -- NvimTree
 -- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+--vim.g.loaded_netrw = 1
+--vim.g.loaded_netrwPlugin = 1
 
 -- optionally enable 24-bit colour
 vim.opt.termguicolors = true
@@ -14,6 +14,8 @@ local cols = vim.api.nvim_win_get_width(0)
 
 -- OR setup with some options
 require("nvim-tree").setup({
+  disable_netrw = false, -- 需要netrw来编辑远程文件
+  hijack_netrw = true,
   sort = {
     sorter = "case_sensitive",
   },
