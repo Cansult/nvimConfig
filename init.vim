@@ -55,6 +55,13 @@ inoremap { {}<ESC>i
 "inoremap ' ''<ESC>i
 "inoremap " ""<ESC>i
 
+autocmd FileType go setlocal tabstop=8 | setlocal shiftwidth=8 | setlocal softtabstop=8 | setlocal noexpandtab
+autocmd FileType gowork setlocal tabstop=8 | setlocal shiftwidth=8 | setlocal softtabstop=8 | setlocal noexpandtab
+autocmd FileType gomod setlocal tabstop=8 | setlocal shiftwidth=8 | setlocal softtabstop=8 | setlocal noexpandtab
+autocmd FileType gosum setlocal tabstop=8 | setlocal shiftwidth=8 | setlocal softtabstop=8 | setlocal noexpandtab
+autocmd FileType cpp setlocal tabstop=2 | setlocal shiftwidth=2 | setlocal softtabstop=2 | setlocal expandtab
+autocmd FileType python setlocal tabstop=4 | setlocal shiftwidth=4 | setlocal softtabstop=4 | setlocal expandtab
+
 call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'preservim/nerdtree'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -71,6 +78,9 @@ call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'famiu/bufdelete.nvim'
   Plug 'nvim-tree/nvim-tree.lua'
   Plug 'HiPhish/rainbow-delimiters.nvim'
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  Plug 'google/vim-maktaba'
+  Plug 'bazelbuild/vim-bazel'
 call plug#end()
 
 :augroup NVT
