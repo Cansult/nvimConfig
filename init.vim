@@ -1,6 +1,8 @@
 syntax off " 与treesitter冲突
 filetype on
-colorscheme slate
+filetype plugin on
+"colorscheme slate
+colorscheme habamax
 set cursorline
 set linebreak
 set foldenable
@@ -30,6 +32,8 @@ set backspace=indent,eol,start
 "set guioptions-=T
 set termguicolors
 
+filetype indent on
+
 "let g:minimap_width = 25
 "let g:minimap_auto_start = 1
 "let g:minimap_auto_start_win_enter = 1
@@ -41,16 +45,20 @@ hi NvimTreeNormalFloat guibg=bg
 " highlight Normal ctermfg=252 ctermbg=none
 
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='onedark'
+let g:autopep8_enable_autoindent = 1
 
 map <F9> : ! g++ % -o %< -std=c++17 -g -Wall -Wextra -Wconversion && size %< <CR>
 map <F8> : ! ./%< <CR>
+" map <F7> :Autopep8<CR>
+nmap <F6> :TagbarToggle<CR>
 map <F5> : ! lldb %< <CR>
 map <C-CR> : NvimTreeToggle <CR>
 
 "我怀疑有个插件有bug，在没有右括号的时候回车不会缩进，还是加上括号补全吧
-inoremap ( ()<ESC>i
-inoremap [ []<ESC>i
-inoremap { {}<ESC>i
+"inoremap ( ()<ESC>i
+"inoremap [ []<ESC>i
+"inoremap { {}<ESC>i
 "inoremap { {<CR>}<ESC>kA
 "inoremap ' ''<ESC>i
 "inoremap " ""<ESC>i
@@ -61,6 +69,29 @@ autocmd FileType gomod setlocal tabstop=8 | setlocal shiftwidth=8 | setlocal sof
 autocmd FileType gosum setlocal tabstop=8 | setlocal shiftwidth=8 | setlocal softtabstop=8 | setlocal noexpandtab
 autocmd FileType cpp setlocal tabstop=2 | setlocal shiftwidth=2 | setlocal softtabstop=2 | setlocal expandtab
 autocmd FileType python setlocal tabstop=4 | setlocal shiftwidth=4 | setlocal softtabstop=4 | setlocal expandtab
+autocmd FileType rust setlocal tabstop=4 | setlocal shiftwidth=4 | setlocal softtabstop=4 | setlocal expandtab
+
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+
+" 启用 indentLine 插件
+" let g:indentLine_enabled = 1
 
 call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'preservim/nerdtree'
@@ -79,8 +110,16 @@ call plug#begin('~/.config/nvim/plugDownloads')
   Plug 'nvim-tree/nvim-tree.lua'
   Plug 'HiPhish/rainbow-delimiters.nvim'
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-  Plug 'google/vim-maktaba'
-  Plug 'bazelbuild/vim-bazel'
+  Plug 'preservim/tagbar'
+  Plug 'tell-k/vim-autopep8'
+  Plug 'tpope/vim-fugitive'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'preservim/nerdcommenter'
+  Plug 'vim-scripts/sh.vim'
+  Plug 'lukas-reineke/indent-blankline.nvim'
+"  Plug 'python-mode/python-mode'
+"  Plug 'google/vim-maktaba'
+"  Plug 'bazelbuild/vim-bazel'
 call plug#end()
 
 :augroup NVT
@@ -106,5 +145,51 @@ source ~/.config/nvim/vim/cocConfig.vim
 
 lua require("treesitterConfig")
 lua require("NvimTreeConfig")
+lua << EOF
+-- Lua 代码开始
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "rust", "python" },  -- 只在 Rust 和 Python 文件中生效
+    callback = function()
+        -- 配置 ibl 插件
+        local highlight = {
+            "RainbowRed",
+            "RainbowYellow",
+            "RainbowBlue",
+            "RainbowOrange",
+            "RainbowGreen",
+            "RainbowViolet",
+            "RainbowCyan",
+        }
+
+        local hooks = require("ibl.hooks")
+
+        -- 创建高亮组并在 colorscheme 改变时重新设置
+        hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+            vim.api.nvim_set_hl(0, "RainbowRed", { bg = "#2E1E20" })      -- 灰色红色
+            vim.api.nvim_set_hl(0, "RainbowYellow", { bg = "#35302D" })    -- 灰色黄色
+            vim.api.nvim_set_hl(0, "RainbowBlue", { bg = "#121823" })      -- 灰色蓝色
+            vim.api.nvim_set_hl(0, "RainbowOrange", { bg = "#342727" })    -- 灰色橙色
+            vim.api.nvim_set_hl(0, "RainbowGreen", { bg = "#4C5632" })     -- 灰色绿色
+            vim.api.nvim_set_hl(0, "RainbowViolet", { bg = "#5F59A9" })    -- 灰色紫色
+            vim.api.nvim_set_hl(0, "RainbowCyan", { bg = "#2F473D" })      -- 灰色青色
+        end)
+
+        -- 配置 ibl 插件
+        require("ibl").setup {
+            indent = {
+                highlight = highlight,
+                char = "",  -- 移除显示的字符，只保留背景色
+            },
+            whitespace = {
+                highlight = highlight,
+                remove_blankline_trail = false,
+            },
+            scope = {
+                enabled = false,
+            },
+        }
+    end,
+})
+EOF
 
 lua print("Done")
