@@ -90,9 +90,6 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
 
-" 启用 indentLine 插件
-" let g:indentLine_enabled = 1
-
 call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'preservim/nerdtree'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}

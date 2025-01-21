@@ -1,4 +1,5 @@
 {
   "clangd.fallbackFlags": [ "-std=c++17" ],
-  "clangd.arguments": [ "--header-insertion=never" ]
+  "clangd.arguments": [ "--header-insertion=never" ],
+  "java.jdt.ls.vmargs": "-Xmx10G",
 }
