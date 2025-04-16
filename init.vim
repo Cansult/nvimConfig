@@ -32,6 +32,10 @@ set backspace=indent,eol,start
 "set guioptions-=T
 set termguicolors
 
+set t_SI=[6\ q
+set t_SR=[4\ q
+set t_EI=[2\ q
+
 filetype indent on
 
 "let g:minimap_width = 25
@@ -53,7 +57,7 @@ map <F8> : ! ./%< <CR>
 " map <F7> :Autopep8<CR>
 nmap <F6> :TagbarToggle<CR>
 map <F5> : ! lldb %< <CR>
-map <C-CR> : NvimTreeToggle <CR>
+map <F7> : NvimTreeToggle <CR>
 
 "我怀疑有个插件有bug，在没有右括号的时候回车不会缩进，还是加上括号补全吧
 "inoremap ( ()<ESC>i
@@ -90,6 +94,34 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
 
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_chan_whitespace_error = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_space_tab_error = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_string_spellcheck = 1
+let g:go_highlight_format_strings = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_diagnostic_errors = 1
+let g:go_highlight_diagnostic_warnings = 1
+
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>ft <cmd>Telescope treesitter<cr>
+nnoremap <leader>fc <cmd>Telescope tags<cr>
+
 call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'preservim/nerdtree'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -100,6 +132,7 @@ call plug#begin('~/.config/nvim/plugDownloads')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'sindrets/diffview.nvim'
   Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
+  Plug 'elzr/vim-json'
 "  Plug 'ryanoasis/vim-devicons' Icons without colours
 "  Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 "  Plug 'simnalamburt/vim-mundo'
@@ -117,6 +150,13 @@ call plug#begin('~/.config/nvim/plugDownloads')
 "  Plug 'python-mode/python-mode'
 "  Plug 'google/vim-maktaba'
 "  Plug 'bazelbuild/vim-bazel'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+  Plug 'williamboman/mason.nvim'
+  Plug 'williamboman/mason-lspconfig.nvim'
+  Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
 :augroup NVT
@@ -142,6 +182,24 @@ source ~/.config/nvim/vim/cocConfig.vim
 
 lua require("treesitterConfig")
 lua require("NvimTreeConfig")
+
+lua << EOF
+require("mason").setup()
+require("mason-lspconfig").setup()
+
+-- After setting up mason-lspconfig you may set up servers via lspconfig
+-- require("lspconfig").lua_ls.setup {}
+-- require("lspconfig").rust_analyzer.setup {}
+-- ...
+--[[
+require'lspconfig'.clangd.setup{
+  cmd = { "clangd", "--background-index" },  -- clangd 的启动命令
+  filetypes = { "c", "cpp", "objc", "objcpp" },  -- 支持的文件类型
+  root_dir = require('lspconfig').util.root_pattern(".git", "compile_commands.json", "CMakeLists.txt"),  -- 项目根目录判断
+}
+]]--
+EOF
+
 lua << EOF
 -- Lua 代码开始
 vim.api.nvim_create_autocmd("FileType", {
